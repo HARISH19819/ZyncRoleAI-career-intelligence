@@ -1,0 +1,273 @@
+{
+  "skills": {
+    "Python": {
+      "canonical": "Python",
+      "category": "Programming Languages",
+      "aliases": ["python3", "python 3", "py", "cpython"]
+    },
+    "JavaScript": {
+      "canonical": "JavaScript",
+      "category": "Programming Languages",
+      "aliases": ["js", "javascript", "java script", "ecmascript", "es6", "es2020"]
+    },
+    "TypeScript": {
+      "canonical": "TypeScript",
+      "category": "Programming Languages",
+      "aliases": ["ts", "typescript", "type script"]
+    },
+    "Java": {
+      "canonical": "Java",
+      "category": "Programming Languages",
+      "aliases": ["core java", "java 8", "java 11", "java 17", "java 21", "j2se"]
+    },
+    "C++": {
+      "canonical": "C++",
+      "category": "Programming Languages",
+      "aliases": ["cpp", "c plus plus", "c++11", "c++14", "c++17", "c++20"]
+    },
+    "C#": {
+      "canonical": "C#",
+      "category": "Programming Languages",
+      "aliases": ["csharp", "c sharp", ".net c#"]
+    },
+    "Go": {
+      "canonical": "Go",
+      "category": "Programming Languages",
+      "aliases": ["golang", "go lang"]
+    },
+    "Rust": {
+      "canonical": "Rust",
+      "category": "Programming Languages",
+      "aliases": ["rustlang", "rust-lang"]
+    },
+    "SQL": {
+      "canonical": "SQL",
+      "category": "Databases & Query",
+      "aliases": ["structured query language", "ansi sql", "t-sql", "pl/sql"]
+    },
+    "HTML": {
+      "canonical": "HTML",
+      "category": "Web Development",
+      "aliases": ["html5", "xhtml"]
+    },
+    "CSS": {
+      "canonical": "CSS",
+      "category": "Web Development",
+      "aliases": ["css3", "vanilla css", "cascading style sheets"]
+    },
+    "React": {
+      "canonical": "React",
+      "category": "Frameworks & Libraries",
+      "aliases": ["reactjs", "react.js", "react js"]
+    },
+    "Node.js": {
+      "canonical": "Node.js",
+      "category": "Runtime & Backend",
+      "aliases": ["nodejs", "node", "node js"]
+    },
+    "FastAPI": {
+      "canonical": "FastAPI",
+      "category": "Frameworks & Libraries",
+      "aliases": ["fast-api", "fast api"]
+    },
+    "Flask": {
+      "canonical": "Flask",
+      "category": "Frameworks & Libraries",
+      "aliases": ["flask py", "flask-restful"]
+    },
+    "Django": {
+      "canonical": "Django",
+      "category": "Frameworks & Libraries",
+      "aliases": ["django rest framework", "drf"]
+    },
+    "Next.js": {
+      "canonical": "Next.js",
+      "category": "Frameworks & Libraries",
+      "aliases": ["nextjs", "next js"]
+    },
+    "Vue.js": {
+      "canonical": "Vue.js",
+      "category": "Frameworks & Libraries",
+      "aliases": ["vue", "vuejs", "vue 3"]
+    },
+    "Angular": {
+      "canonical": "Angular",
+      "category": "Frameworks & Libraries",
+      "aliases": ["angularjs", "angular 2+", "angular io"]
+    },
+    "Tailwind CSS": {
+      "canonical": "Tailwind CSS",
+      "category": "Web Development",
+      "aliases": ["tailwind", "tailwindcss", "tailwind-css"]
+    },
+    "scikit-learn": {
+      "canonical": "scikit-learn",
+      "category": "AI & Machine Learning",
+      "aliases": ["sklearn", "scikit learn", "scikit_learn", "sci-kit learn"]
+    },
+    "TensorFlow": {
+      "canonical": "TensorFlow",
+      "category": "AI & Machine Learning",
+      "aliases": ["tf", "tensorflow", "tensor flow", "tf2", "tensorflow 2"]
+    },
+    "PyTorch": {
+      "canonical": "PyTorch",
+      "category": "AI & Machine Learning",
+      "aliases": ["pytorch", "torch", "py torch"]
+    },
+    "Pandas": {
+      "canonical": "Pandas",
+      "category": "Data Science & Analytics",
+      "aliases": ["pandas-lib", "python pandas"]
+    },
+    "NumPy": {
+      "canonical": "NumPy",
+      "category": "Data Science & Analytics",
+      "aliases": ["numpy-lib", "numpy arrays"]
+    },
+    "Keras": {
+      "canonical": "Keras",
+      "category": "AI & Machine Learning",
+      "aliases": ["tf.keras", "keras api"]
+    },
+    "OpenCV": {
+      "canonical": "OpenCV",
+      "category": "AI & Machine Learning",
+      "aliases": ["cv2", "open cv", "computer vision"]
+    },
+    "Hugging Face": {
+      "canonical": "Hugging Face",
+      "category": "AI & Machine Learning",
+      "aliases": ["huggingface", "transformers", "hf"]
+    },
+    "Natural Language Processing": {
+      "canonical": "NLP",
+      "category": "AI & Machine Learning",
+      "aliases": ["nlp", "natural language processing", "text mining", "spacy", "nltk"]
+    },
+    "Large Language Models": {
+      "canonical": "LLMs",
+      "category": "AI & Machine Learning",
+      "aliases": ["llm", "llms", "large language models", "prompt engineering", "langchain", "rag", "retrieval augmented generation"]
+    },
+    "Machine Learning": {
+      "canonical": "Machine Learning",
+      "category": "AI & Machine Learning",
+      "aliases": ["ml", "machine learning algorithms", "predictive modeling"]
+    },
+    "Deep Learning": {
+      "canonical": "Deep Learning",
+      "category": "AI & Machine Learning",
+      "aliases": ["dl", "deep neural networks", "neural networks", "cnn", "rnn", "lstm"]
+    },
+    "PostgreSQL": {
+      "canonical": "PostgreSQL",
+      "category": "Databases & Query",
+      "aliases": ["postgres", "pgsql", "postgresql db"]
+    },
+    "MySQL": {
+      "canonical": "MySQL",
+      "category": "Databases & Query",
+      "aliases": ["mysql server", "maria db", "mariadb"]
+    },
+    "MongoDB": {
+      "canonical": "MongoDB",
+      "category": "Databases & Query",
+      "aliases": ["mongo", "mongodb atlas"]
+    },
+    "Redis": {
+      "canonical": "Redis",
+      "category": "Databases & Query",
+      "aliases": ["redis cache", "redis key-value"]
+    },
+    "Docker": {
+      "canonical": "Docker",
+      "category": "DevOps & Cloud",
+      "aliases": ["docker containers", "docker compose", "containerization"]
+    },
+    "Kubernetes": {
+      "canonical": "Kubernetes",
+      "category": "DevOps & Cloud",
+      "aliases": ["k8s", "k8", "kube"]
+    },
+    "AWS": {
+      "canonical": "AWS",
+      "category": "DevOps & Cloud",
+      "aliases": ["amazon web services", "ec2", "s3", "lambda", "aws cloud"]
+    },
+    "Google Cloud Platform": {
+      "canonical": "GCP",
+      "category": "DevOps & Cloud",
+      "aliases": ["gcp", "google cloud", "google cloud platform"]
+    },
+    "Microsoft Azure": {
+      "canonical": "Azure",
+      "category": "DevOps & Cloud",
+      "aliases": ["azure cloud", "ms azure"]
+    },
+    "Git": {
+      "canonical": "Git",
+      "category": "Tools & Version Control",
+      "aliases": ["git version control", "github", "gitlab", "bitbucket"]
+    },
+    "CI/CD": {
+      "canonical": "CI/CD",
+      "category": "DevOps & Cloud",
+      "aliases": ["cicd", "continuous integration", "continuous deployment", "github actions", "jenkins"]
+    },
+    "Linux": {
+      "canonical": "Linux",
+      "category": "Operating Systems & Platforms",
+      "aliases": ["unix", "bash", "shell scripting", "ubuntu", "debian"]
+    },
+    "REST API": {
+      "canonical": "REST APIs",
+      "category": "Architecture & Networking",
+      "aliases": ["rest", "restful", "restful api", "rest apis", "web services"]
+    },
+    "GraphQL": {
+      "canonical": "GraphQL",
+      "category": "Architecture & Networking",
+      "aliases": ["graph ql", "apollo graphql"]
+    },
+    "Problem Solving": {
+      "canonical": "Problem Solving",
+      "category": "Soft Skills",
+      "aliases": ["analytical thinking", "critical thinking", "algorithmic problem solving"]
+    },
+    "Communication": {
+      "canonical": "Communication",
+      "category": "Soft Skills",
+      "aliases": ["verbal communication", "written communication", "presentation skills"]
+    },
+    "Team Collaboration": {
+      "canonical": "Team Collaboration",
+      "category": "Soft Skills",
+      "aliases": ["team player", "cross-functional collaboration", "teamwork", "agile team"]
+    }
+  },
+  "domains": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Data Science",
+    "Data Analytics",
+    "Software Development",
+    "Full Stack Development",
+    "Frontend Development",
+    "Backend Development",
+    "Mobile Development",
+    "Cloud Computing",
+    "DevOps",
+    "Cybersecurity",
+    "QA / Testing",
+    "Database",
+    "Salesforce",
+    "UI/UX",
+    "Product Management",
+    "Business Analysis",
+    "Embedded Systems",
+    "IoT",
+    "Networking",
+    "Other"
+  ]
+}

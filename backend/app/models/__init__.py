@@ -1,0 +1,31 @@
+from app.models.all_models import (
+    Profile,
+    CareerPreference,
+    CandidateProfile,
+    Resume,
+    ResumeAnalysis,
+    JobSource,
+    Job,
+    JobMatch,
+    SavedJob,
+    Application,
+    Notification,
+    JobIngestionRun,
+    UserActivity,
+)
+
+__all__ = [
+    "Profile",
+    "CareerPreference",
+    "CandidateProfile",
+    "Resume",
+    "ResumeAnalysis",
+    "JobSource",
+    "Job",
+    "JobMatch",
+    "SavedJob",
+    "Application",
+    "Notification",
+    "JobIngestionRun",
+    "UserActivity",
+]

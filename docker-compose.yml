@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: zyncrole_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - SUPABASE_DB_URL=sqlite+aiosqlite:////app/zyncrole.db
+      - JWT_SECRET=production-secret-zyncrole-jwt-32-chars-long-2026
+      - ATS_RESUME_BUILDER_URL=https://open-resume.com
+    volumes:
+      - zyncrole_data:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: zyncrole_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  zyncrole_data:
