@@ -14,29 +14,28 @@ import {
 } from 'recharts'
 import {
   TrendingUp,
-  Briefcase,
-  MapPin,
-  Sparkles,
   PieChart as PieIcon,
-  CheckCircle2
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react'
 
 export const CareerPage: React.FC = () => {
   const [data, setData] = useState<CareerInsights | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchInsights = async () => {
-      setIsLoading(true)
-      try {
-        const res = await api.get<CareerInsights>('/career/insights')
-        setData(res)
-      } catch {
-        setData(null)
-      } finally {
-        setIsLoading(false)
-      }
+  const fetchInsights = async () => {
+    setIsLoading(true)
+    try {
+      const res = await api.get<CareerInsights>('/career/insights')
+      setData(res)
+    } catch {
+      setData(null)
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  useEffect(() => {
     fetchInsights()
   }, [])
 
@@ -49,9 +48,26 @@ export const CareerPage: React.FC = () => {
     )
   }
 
-  if (!data) return null
-
-  const COLORS = ['#6366f1', '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899']
+  if (!data) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-20 text-center">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4">
+          <AlertCircle className="w-6 h-6" />
+        </div>
+        <h2 className="text-lg font-bold text-slate-800">Career Insights Unavailable</h2>
+        <p className="mt-2 text-sm text-slate-500">
+          We could not load real-time market metrics right now. Please verify your connection or try again.
+        </p>
+        <button
+          onClick={fetchInsights}
+          className="mt-5 inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl transition"
+        >
+          <RefreshCw className="w-4 h-4 mr-2" />
+          <span>Retry</span>
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">

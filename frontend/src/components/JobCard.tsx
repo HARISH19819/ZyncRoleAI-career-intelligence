@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Bookmark, ExternalLink, Sparkles, MapPin, Building2, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Bookmark, ExternalLink, Sparkles, MapPin, Building2, Clock } from 'lucide-react'
 import { Job, JobMatchExplanation } from '@/types'
 import { getMatchScoreColor, formatSalary, ensureAbsoluteUrl } from '@/lib/utils'
 import { api } from '@/lib/api'
@@ -16,7 +16,6 @@ export const JobCard: React.FC<Props> = ({ job, onToggleSave, onApplyClicked }) 
   const [isSaving, setIsSaving] = useState(false)
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [explanation, setExplanation] = useState<JobMatchExplanation | null>(null)
-  const [isLoadingMatch, setIsLoadingMatch] = useState(false)
   const [showApplyFeedback, setShowApplyFeedback] = useState(false)
 
   const scoreStyle = job.match_score ? getMatchScoreColor(job.match_score) : null
@@ -49,7 +48,6 @@ export const JobCard: React.FC<Props> = ({ job, onToggleSave, onApplyClicked }) 
     e.preventDefault()
     setIsDrawerOpen(true)
     if (!explanation) {
-      setIsLoadingMatch(true)
       try {
         const res = await api.get<JobMatchExplanation>(`/jobs/${job.id}/match`)
         setExplanation(res)
@@ -77,16 +75,8 @@ export const JobCard: React.FC<Props> = ({ job, onToggleSave, onApplyClicked }) 
           explanation: job.explanation || 'Matches your career profile and domain requirements.',
           how_to_improve: 'Add relevant tools and projects to your profile.'
         })
-      } finally {
-        setIsLoadingMatch(false)
       }
     }
-  }
-
-  const handleApplyClick = () => {
-    window.open(job.apply_url, '_blank', 'noopener,noreferrer')
-    setShowApplyFeedback(true)
-    onApplyClicked?.(job.id)
   }
 
   const handleConfirmApplied = async (applied: boolean) => {

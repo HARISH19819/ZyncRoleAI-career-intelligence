@@ -5,18 +5,12 @@ import { ApplicationItem } from '@/types'
 import { getScoreColor } from '@/lib/utils'
 import {
   Briefcase,
-  CheckCircle2,
-  Clock,
   ExternalLink,
-  Filter,
-  MoreVertical,
   Plus,
   Trash2,
   FileEdit,
   Building,
   MapPin,
-  Calendar,
-  AlertCircle,
   LayoutGrid,
   List as ListIcon
 } from 'lucide-react'
@@ -41,9 +35,10 @@ export const ApplicationsPage: React.FC = () => {
     setIsLoading(true)
     try {
       const data = await api.get<ApplicationItem[]>('/applications')
-      setApplications(data)
+      setApplications(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error('Failed to load applications:', err)
+      setApplications([])
     } finally {
       setIsLoading(false)
     }

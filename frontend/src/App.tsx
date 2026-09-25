@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { AppLayout, PublicLayout } from '@/layouts/AppLayout'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 // Public Pages
 import { LandingPage } from '@/pages/LandingPage'
@@ -38,44 +39,46 @@ const queryClient = new QueryClient({
 
 export const App: React.FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            {/* Public Layout */}
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/jobs" element={<JobExplorerPage />} />
-              <Route path="/jobs/:id" element={<JobDetailPage />} />
-              <Route path="/career" element={<CareerPage />} />
-            </Route>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              {/* Public Layout */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/jobs" element={<JobExplorerPage />} />
+                <Route path="/jobs/:id" element={<JobDetailPage />} />
+                <Route path="/career" element={<CareerPage />} />
+              </Route>
 
-            {/* Authenticated Protected Layout */}
-            <Route element={<AppLayout />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/onboarding" element={<OnboardingPage />} />
-              <Route path="/resume" element={<ResumePage />} />
-              <Route path="/resume/analysis" element={<ResumeAnalysisPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/skill-gaps" element={<SkillGapsPage />} />
-              <Route path="/saved" element={<SavedJobsPage />} />
-              <Route path="/applications" element={<ApplicationsPage />} />
-              <Route path="/alerts" element={<AlertsPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-            </Route>
+              {/* Authenticated Protected Layout */}
+              <Route element={<AppLayout />}>
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/onboarding" element={<OnboardingPage />} />
+                <Route path="/resume" element={<ResumePage />} />
+                <Route path="/resume/analysis" element={<ResumeAnalysisPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/skill-gaps" element={<SkillGapsPage />} />
+                <Route path="/saved" element={<SavedJobsPage />} />
+                <Route path="/applications" element={<ApplicationsPage />} />
+                <Route path="/alerts" element={<AlertsPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Route>
 
-            {/* Fallback & 404 */}
-            <Route element={<PublicLayout />}>
-              <Route path="/404" element={<NotFoundPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </QueryClientProvider>
+              {/* Fallback & 404 */}
+              <Route element={<PublicLayout />}>
+                <Route path="/404" element={<NotFoundPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 

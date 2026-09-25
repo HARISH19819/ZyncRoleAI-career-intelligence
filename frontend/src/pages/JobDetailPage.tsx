@@ -6,16 +6,13 @@ import { getMatchScoreColor, formatSalary, ensureAbsoluteUrl } from '@/lib/utils
 import { MatchExplanationDrawer } from '@/components/MatchExplanationDrawer'
 import {
   ArrowLeft,
-  Building2,
   MapPin,
   Clock,
   Bookmark,
   ExternalLink,
-  Sparkles,
   CheckCircle2,
   AlertCircle,
-  ShieldCheck,
-  Share2
+  ShieldCheck
 } from 'lucide-react'
 
 export const JobDetailPage: React.FC = () => {
@@ -66,12 +63,6 @@ export const JobDetailPage: React.FC = () => {
     } finally {
       setIsSaving(false)
     }
-  }
-
-  const handleApplyClick = () => {
-    if (!job) return
-    window.open(job.apply_url, '_blank', 'noopener,noreferrer')
-    setShowApplyFeedback(true)
   }
 
   const handleConfirmApplied = async (applied: boolean) => {

@@ -10,7 +10,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Check,
-  Plus,
   X
 } from 'lucide-react'
 
@@ -18,7 +17,7 @@ export const OnboardingPage: React.FC = () => {
   const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { user } = useAuth()
+  useAuth()
 
   // Form State
   // Step 1: Education
@@ -38,7 +37,7 @@ export const OnboardingPage: React.FC = () => {
     'Machine Learning',
     'Artificial Intelligence'
   ])
-  const [experienceLevel, setExperienceLevel] = useState('fresher')
+  const [experienceLevel] = useState('fresher')
 
   // Step 3: Preferences
   const [preferredLocations, setPreferredLocations] = useState<string[]>([
@@ -48,7 +47,7 @@ export const OnboardingPage: React.FC = () => {
   const [locationInput, setLocationInput] = useState('')
   const [workModes, setWorkModes] = useState<string[]>(['Remote', 'Hybrid'])
   const [employmentType, setEmploymentType] = useState('Full-time')
-  const [salaryPreference, setSalaryPreference] = useState<number>(85000)
+  const [salaryPreference] = useState<number>(85000)
 
   // Step 4: Skills
   const [technicalSkills, setTechnicalSkills] = useState<string[]>([

@@ -4,7 +4,6 @@ import { api } from '@/lib/api'
 import { NotificationItem } from '@/types'
 import {
   Bell,
-  CheckCircle2,
   Sparkles,
   FileText,
   Briefcase,
@@ -22,9 +21,10 @@ export const AlertsPage: React.FC = () => {
     setIsLoading(true)
     try {
       const data = await api.get<NotificationItem[]>('/notifications')
-      setNotifications(data)
+      setNotifications(Array.isArray(data) ? data : [])
     } catch (err) {
       console.error('Failed to load notifications:', err)
+      setNotifications([])
     } finally {
       setIsLoading(false)
     }

@@ -1,0 +1,24 @@
+services:
+  # Option 1: Unified Docker Service (Frontend + Backend on single URL)
+  - type: web
+    name: zyncrole-ai
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: oregon
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ATS_RESUME_BUILDER_URL
+        value: https://www.open-resume.com
+      - key: CORS_ORIGINS
+        value: '["*"]'
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
