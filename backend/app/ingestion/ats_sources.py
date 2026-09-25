@@ -23,19 +23,19 @@ class GreenhouseSourceAdapter(JobSourceAdapter):
     region = "GLOBAL"
     enabled = True
 
-    DEFAULT_BOARDS = ["github", "gitlab", "cloudflare", "stripe"]
+    DEFAULT_BOARDS = ["cloudflare", "gitlab", "airtable", "datadog", "stripe"]
 
-    async def fetch_jobs(self, query: str = "", location: str = "", limit: int = 15) -> List[Dict[str, Any]]:
+    async def fetch_jobs(self, query: str = "", location: str = "", limit: int = 30) -> List[Dict[str, Any]]:
         all_jobs = []
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            for board in self.DEFAULT_BOARDS[:2]:
+        async with httpx.AsyncClient(timeout=12.0) as client:
+            for board in self.DEFAULT_BOARDS:
                 url = f"https://boards-api.greenhouse.io/v1/boards/{board}/jobs?content=true"
                 try:
                     resp = await client.get(url)
                     if resp.status_code == 200:
                         data = resp.json()
                         jobs = data.get("jobs", [])
-                        for j in jobs[:8]:
+                        for j in jobs[:10]:
                             norm = self.normalize_job(j, company_name=board.capitalize())
                             if self.validate_job(norm):
                                 all_jobs.append(norm)

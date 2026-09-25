@@ -63,3 +63,16 @@ async def get_current_user_token(credentials: Optional[HTTPAuthorizationCredenti
             headers={"WWW-Authenticate": "Bearer"},
         )
     return decode_token(credentials.credentials)
+
+
+security_bearer_optional = HTTPBearer(auto_error=False)
+
+
+async def get_optional_user_token(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_bearer_optional)) -> Optional[Dict[str, Any]]:
+    if not credentials:
+        return None
+    try:
+        return decode_token(credentials.credentials)
+    except Exception:
+        return None
+

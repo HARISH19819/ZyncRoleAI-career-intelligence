@@ -6,6 +6,7 @@ from app.ingestion.ats_sources import GreenhouseSourceAdapter, LeverSourceAdapte
 from app.ingestion.gated_sources import (
     RemotiveSourceAdapter, linkedin_adapter, indeed_adapter, naukri_adapter, internshala_adapter
 )
+from app.ingestion.arbeitnow import ArbeitnowSourceAdapter
 from app.ingestion.generic_feed import demo_source_adapter
 
 
@@ -25,6 +26,7 @@ class SourceRegistry:
             LeverSourceAdapter(),
             AshbySourceAdapter(),
             RemotiveSourceAdapter(),
+            ArbeitnowSourceAdapter(),
             linkedin_adapter,
             indeed_adapter,
             naukri_adapter,

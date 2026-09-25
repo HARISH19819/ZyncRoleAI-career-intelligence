@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Bookmark, ExternalLink, Sparkles, MapPin, Building2, Clock, CheckCircle2, AlertCircle } from 'lucide-react'
 import { Job, JobMatchExplanation } from '@/types'
-import { getMatchScoreColor, formatSalary } from '@/lib/utils'
+import { getMatchScoreColor, formatSalary, ensureAbsoluteUrl } from '@/lib/utils'
 import { api } from '@/lib/api'
 import { MatchExplanationDrawer } from '@/components/MatchExplanationDrawer'
 
@@ -206,7 +206,6 @@ export const JobCard: React.FC<Props> = ({ job, onToggleSave, onApplyClicked }) 
           <div className="text-[11px] text-slate-400">
             Source: <span className="font-medium text-slate-600">{job.source_name || job.source_id.toUpperCase()}</span>
           </div>
-
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -215,14 +214,20 @@ export const JobCard: React.FC<Props> = ({ job, onToggleSave, onApplyClicked }) 
             >
               Details
             </button>
-            <button
-              type="button"
-              onClick={handleApplyClick}
+            <a
+              href={ensureAbsoluteUrl(job.apply_url)}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowApplyFeedback(true)
+                onApplyClicked?.(job.id)
+              }}
               className="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-subtle transition"
             >
               <span>Apply on {job.source_name || 'Source'}</span>
               <ExternalLink className="w-3 h-3 ml-1.5" />
-            </button>
+            </a>
           </div>
         </div>
       </div>

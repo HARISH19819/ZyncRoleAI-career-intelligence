@@ -5,7 +5,7 @@ from sqlalchemy import select, or_, and_, func
 from app.db.session import get_db
 from app.models.all_models import Profile, Job, JobSource, CandidateProfile, SavedJob, Application, UserActivity
 from app.schemas.all_schemas import JobSummary, JobDetail, JobMatchExplanation
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, get_optional_current_user
 from app.agents.career_feed_agent import career_feed_agent
 from app.services.matching.matching_engine import matching_engine
 from app.services.jobs.freshness import calculate_freshness_label
@@ -24,13 +24,26 @@ async def list_jobs(
     sort: Optional[str] = Query("match_score", description="match_score, newest, salary"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
-    current_user: Profile = Depends(get_current_user),
+    current_user: Optional[Profile] = Depends(get_optional_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    # Fetch candidate profile for dynamic matching
-    cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
-    cand_res = await db.execute(cand_stmt)
-    cand_profile = cand_res.scalar_one_or_none()
+    cand_profile = None
+    saved_set = set()
+    app_map = {}
+
+    if current_user:
+        cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
+        cand_res = await db.execute(cand_stmt)
+        cand_profile = cand_res.scalar_one_or_none()
+
+        saved_stmt = select(SavedJob.job_id).where(SavedJob.user_id == current_user.id)
+        saved_res = await db.execute(saved_stmt)
+        saved_set = set(saved_res.scalars().all())
+
+        app_stmt = select(Application.job_id, Application.status).where(Application.user_id == current_user.id)
+        app_res = await db.execute(app_stmt)
+        app_map = {row[0]: row[1] for row in app_res.all()}
+
     candidate_dict = {
         "skills": cand_profile.skills or [] if cand_profile else [],
         "preferred_roles": cand_profile.preferred_roles or [] if cand_profile else [],
@@ -40,15 +53,6 @@ async def list_jobs(
         "preferred_locations": cand_profile.preferred_locations or [] if cand_profile else [],
         "work_mode": cand_profile.work_mode or [] if cand_profile else [],
     }
-
-    # Fetch saved and applied job IDs
-    saved_stmt = select(SavedJob.job_id).where(SavedJob.user_id == current_user.id)
-    saved_res = await db.execute(saved_stmt)
-    saved_set = set(saved_res.scalars().all())
-
-    app_stmt = select(Application.job_id, Application.status).where(Application.user_id == current_user.id)
-    app_res = await db.execute(app_stmt)
-    app_map = {row[0]: row[1] for row in app_res.all()}
 
     # Base query for active jobs
     stmt = select(Job).where(Job.status == "ACTIVE")
@@ -147,7 +151,7 @@ async def get_sources(db: AsyncSession = Depends(get_db)):
 @router.get("/{job_id}", response_model=JobDetail)
 async def get_job_detail(
     job_id: str,
-    current_user: Profile = Depends(get_current_user),
+    current_user: Optional[Profile] = Depends(get_optional_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     stmt = select(Job).where(Job.id == job_id)
@@ -156,20 +160,25 @@ async def get_job_detail(
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job opportunity not found.")
 
-    # Check saved & applied status
-    saved_stmt = select(SavedJob).where(SavedJob.user_id == current_user.id, SavedJob.job_id == job.id)
-    s_res = await db.execute(saved_stmt)
-    is_saved = s_res.scalar_one_or_none() is not None
+    is_saved = False
+    app_status = None
+    cand = None
 
-    app_stmt = select(Application).where(Application.user_id == current_user.id, Application.job_id == job.id)
-    a_res = await db.execute(app_stmt)
-    app = a_res.scalar_one_or_none()
-    app_status = app.status if app else None
+    if current_user:
+        # Check saved & applied status
+        saved_stmt = select(SavedJob).where(SavedJob.user_id == current_user.id, SavedJob.job_id == job.id)
+        s_res = await db.execute(saved_stmt)
+        is_saved = s_res.scalar_one_or_none() is not None
 
-    # Calculate match score
-    cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
-    cand_res = await db.execute(cand_stmt)
-    cand = cand_res.scalar_one_or_none()
+        app_stmt = select(Application).where(Application.user_id == current_user.id, Application.job_id == job.id)
+        a_res = await db.execute(app_stmt)
+        app = a_res.scalar_one_or_none()
+        app_status = app.status if app else None
+
+        # Calculate match score
+        cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
+        cand_res = await db.execute(cand_stmt)
+        cand = cand_res.scalar_one_or_none()
 
     match_score = None
     if cand:
@@ -202,9 +211,10 @@ async def get_job_detail(
         res_m = matching_engine.calculate_match(cand_dict, job_dict, cand.embedding, job.embedding)
         match_score = res_m["match_score"]
 
-    # Record job view activity
-    db.add(UserActivity(user_id=current_user.id, event_type="job_viewed", event_data={"job_id": job.id, "title": job.title}))
-    await db.commit()
+    if current_user:
+        # Record job view activity
+        db.add(UserActivity(user_id=current_user.id, event_type="job_viewed", event_data={"job_id": job.id, "title": job.title}))
+        await db.commit()
 
     return JobDetail(
         id=job.id,
@@ -246,7 +256,7 @@ async def get_job_detail(
 @router.get("/{job_id}/match", response_model=JobMatchExplanation)
 async def get_job_match_explanation(
     job_id: str,
-    current_user: Profile = Depends(get_current_user),
+    current_user: Optional[Profile] = Depends(get_optional_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     stmt = select(Job).where(Job.id == job_id)
@@ -255,20 +265,20 @@ async def get_job_match_explanation(
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found.")
 
-    cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
-    cand_res = await db.execute(cand_stmt)
-    cand = cand_res.scalar_one_or_none()
-    if not cand:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Candidate profile not found.")
+    cand = None
+    if current_user:
+        cand_stmt = select(CandidateProfile).where(CandidateProfile.user_id == current_user.id)
+        cand_res = await db.execute(cand_stmt)
+        cand = cand_res.scalar_one_or_none()
 
     cand_dict = {
-        "skills": cand.skills or [],
-        "preferred_roles": cand.preferred_roles or [],
-        "domains": cand.domains or [],
-        "career_level": cand.career_level or "fresher",
-        "education": cand.education or [],
-        "preferred_locations": cand.preferred_locations or [],
-        "work_mode": cand.work_mode or [],
+        "skills": cand.skills or [] if cand else ["Python", "JavaScript", "Problem Solving"],
+        "preferred_roles": cand.preferred_roles or [] if cand else [job.title],
+        "domains": cand.domains or [] if cand else [job.domain],
+        "career_level": cand.career_level or "fresher" if cand else "fresher",
+        "education": cand.education or [] if cand else [],
+        "preferred_locations": cand.preferred_locations or [] if cand else [job.location],
+        "work_mode": cand.work_mode or [] if cand else [job.work_mode],
     }
     job_dict = {
         "title": job.title,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { api } from '@/lib/api'
 import { JobDetail, JobMatchExplanation } from '@/types'
-import { getMatchScoreColor, formatSalary } from '@/lib/utils'
+import { getMatchScoreColor, formatSalary, ensureAbsoluteUrl } from '@/lib/utils'
 import { MatchExplanationDrawer } from '@/components/MatchExplanationDrawer'
 import {
   ArrowLeft,
@@ -317,14 +317,16 @@ export const JobDetailPage: React.FC = () => {
 
             {/* Primary Action Buttons */}
             <div className="space-y-2.5 pt-2">
-              <button
-                type="button"
-                onClick={handleApplyClick}
-                className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-subtle transition"
+              <a
+                href={ensureAbsoluteUrl(job.apply_url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShowApplyFeedback(true)}
+                className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-subtle transition text-center"
               >
                 <span>Apply on {job.source_name || job.source_id.toUpperCase()}</span>
                 <ExternalLink className="w-4 h-4 ml-1.5" />
-              </button>
+              </a>
 
               <button
                 type="button"

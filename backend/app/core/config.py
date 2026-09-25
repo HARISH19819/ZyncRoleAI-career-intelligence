@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     # Database
     # Defaults to local SQLite if Supabase Postgres isn't provided
-    SUPABASE_DB_URL: str = "sqlite+aiosqlite:///./zyncrole.db"
+    SUPABASE_DB_URL: str = f"sqlite+aiosqlite:///{os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'zyncrole.db')).replace(chr(92), '/')}"
     SUPABASE_URL: str = "https://your-project.supabase.co"
     SUPABASE_ANON_KEY: str = "your-supabase-anon-key"
     SUPABASE_SERVICE_ROLE_KEY: str = "your-supabase-service-role-key"
@@ -70,7 +70,7 @@ class Settings(BaseSettings):
     ADZUNA_COUNTRY: str = "us"
     JOOBLE_API_KEY: str = ""
     THE_MUSE_API_KEY: str = ""
-    REMOTIVE_API_ENABLED: bool = False
+    REMOTIVE_API_ENABLED: bool = True
 
     # Gated platforms
     LINKEDIN_CLIENT_ID: str = ""

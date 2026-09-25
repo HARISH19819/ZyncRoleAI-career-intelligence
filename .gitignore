@@ -60,3 +60,7 @@ Thumbs.db
 
 # Supabase Local
 .supabase/
+
+# Uploads
+backend/app/uploads/*
+!backend/app/uploads/.gitkeep

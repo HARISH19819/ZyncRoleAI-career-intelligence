@@ -120,7 +120,7 @@ async def get_dashboard(
         saved_job_ids=saved_set,
         application_map=app_map,
         sort_by="match_score",
-        limit=5
+        limit=12
     )
 
     strong_matches_count = len([j for j in ranked_jobs if j["match_score"] >= 75.0])
