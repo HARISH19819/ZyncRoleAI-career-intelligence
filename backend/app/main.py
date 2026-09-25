@@ -49,6 +49,14 @@ async def lifespan(app: FastAPI):
     logger.info(f"Shutting down {settings.PROJECT_NAME} backend...")
 
 
+# Discover built frontend distribution assets
+dist_candidates = [
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")),
+    os.path.abspath(os.path.join(os.getcwd(), "frontend", "dist")),
+    os.path.abspath(os.path.join(os.getcwd(), "dist")),
+]
+dist_dir = next((d for d in dist_candidates if os.path.exists(os.path.join(d, "index.html"))), None)
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Autonomous AI Career Intelligence and Personalized Job Matching Platform",
@@ -107,14 +115,25 @@ app.include_router(dashboard_router)
 app.include_router(internal_router)
 
 
-@app.get("/")
-async def root():
+@app.get("/api/status")
+async def api_status():
     return {
         "product": settings.PROJECT_NAME,
         "tagline": "One Resume. Every Opportunity. One Intelligent Career Feed.",
         "status": "operational",
         "version": "1.0.0"
     }
+
+
+if not dist_dir:
+    @app.get("/")
+    async def root():
+        return {
+            "product": settings.PROJECT_NAME,
+            "tagline": "One Resume. Every Opportunity. One Intelligent Career Feed.",
+            "status": "operational",
+            "version": "1.0.0"
+        }
 
 
 @app.get("/health")
@@ -151,20 +170,13 @@ async def health_check(db: AsyncSession = Depends(get_db)):
 
 
 # SPA Static Files support for single-service / Docker production deployments
-dist_candidates = [
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "dist")),
-    os.path.abspath(os.path.join(os.getcwd(), "frontend", "dist")),
-    os.path.abspath(os.path.join(os.getcwd(), "dist")),
-]
-dist_dir = next((d for d in dist_candidates if os.path.exists(os.path.join(d, "index.html"))), None)
-
 if dist_dir:
     logger.info(f"Production static assets discovered at {dist_dir}. Serving SPA fallback.")
     assets_dir = os.path.join(dist_dir, "assets")
     if os.path.exists(assets_dir):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="frontend_assets")
 
-    @app.get("/{full_path:path}", include_in_schema=False)
+    @app.api_route("/{full_path:path}", methods=["GET", "HEAD"], include_in_schema=False)
     async def serve_spa(full_path: str):
         if full_path.startswith("api/") or full_path in ("health", "docs", "redoc", "openapi.json"):
             from fastapi import HTTPException
